@@ -5,14 +5,14 @@ describe "gratter" do
 
   let(:url) { "http://www.livefootball.com/football/england/premier-league/league-table/" }
   let(:xpaths) { { :team => "//td[@class='ltn']/text()", :points => "//td[@class='ltp']/text()" } }
-  let(:inst) { Gratter.new( { :url => url, :xpaths => xpaths } ) }
+  let(:instance) { Gratter.new( { :url => url, :xpaths => xpaths } ) }
 
   it "has a URL" do
-    expect(inst.url).to eq("http://www.livefootball.com/football/england/premier-league/league-table/")
+    expect(instance.url).to eq("http://www.livefootball.com/football/england/premier-league/league-table/")
   end
 
   it "returns a piece of a document" do
-    piece = inst.use
+    piece = instance.use
     expect(piece).to eq("")
   end
 
@@ -20,19 +20,30 @@ end
 
 describe "Single Classes" do
 
-#  let(:doc) { }
+  let(:xpaths) { { :team => "//td[@class='ltn']/text()", :points => "//td[@class='ltp']/text()" } }
+  let(:results) { { :team => "Team Name", :points => "PTS" } }
+  let(:doc) { @doc = parser.parse }
 
-# it "returns a Nokogiri document" do
-#   doc = inst.use
-#   expect(doc.class).to eql Nokogiri::HTML::Document
-# end
+  before(:all) do
+    parser = Parser.new("http://www.livefootball.com/football/england/premier-league/league-table/")
+    xpather = Xpather.new(@doc, xpaths)
+  end
+
+  describe "Parser" do
+    it "returns a Nokogiri document" do
+      expect(@doc.class).to eql Nokogiri::HTML::Document
+    end
+  end
 
   describe "Xpather" do
 
-    it "returns a hash with the tags and the selected data" do
-      
+    it "has a doc to work with" do
+      expect(xpather.doc.class).to eql Nokogiri::HTML::Document
     end
 
+    it "returns a hash with the tags and the selected data" do
+      expect(xpather.xpath).to eq(results)
+    end
   end
 
 end

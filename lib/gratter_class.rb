@@ -4,7 +4,6 @@ require 'net/http'
 class Gratter
 
   attr_reader :url
-
   def initialize(args)
     @url    = args[:url]
     @xpath  = args[:xpath] || {}
@@ -40,12 +39,13 @@ end
 
 class Xpather
 
+  attr_reader :doc
   def initialize(doc, xpath)
     @doc, @xpath = doc, xpath
   end
 
   def xpath
-    @doc.xpath(@xpath).text
+    @doc.xpath(@xpath)
   end
 
 end
