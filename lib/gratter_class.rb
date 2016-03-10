@@ -14,6 +14,7 @@ class Gratter
     doc = parser.parse
     xpather = Xpather.new(doc, @xpath)
     result = xpather.xpath
+    return result
   end
 
   # def do
@@ -45,8 +46,14 @@ class Xpather
     @xpath = xpath
   end
 
-  def xpath
-    return @doc.xpath(@xpath).length
+  def get_data
+    result = {}
+    xpath.each do |tag, xp|
+      array = @doc.xpath(xp).to_a
+      array.map! { |node| node.to_s }
+      result[tag] = array
+    end
+    return result
   end
 
 end
