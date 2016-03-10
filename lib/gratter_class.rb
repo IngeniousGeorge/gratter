@@ -5,8 +5,9 @@ class Gratter
 
   attr_reader :url
 
-  def initialize(url, xpath)
-    @url, @xpath = url, xpath
+  def initialize(args)
+    @url    = args[:url]
+    @xpath  = args[:xpath] || {}
   end
 
   def use
@@ -16,9 +17,9 @@ class Gratter
     result = xpather.xpath
   end
 
-  def do
-    "nothing"
-  end
+  # def do
+  #   "nothing"
+  # end
 
 end
 

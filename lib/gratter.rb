@@ -1,5 +1,8 @@
 require_relative 'gratter_class'
 
-lequipe = Gratter.new("http://www.livefootball.com", "//a[@class='btn btnHome']/@href")
+url = "http://www.livefootball.com/football/england/premier-league/league-table/"
+xpaths = { :team => "//td[@class='ltn']/text()", :points => "//td[@class='ltp']/text()" }
 
-puts lequipe.use
+livefootball = Gratter.new( { url: url, xpaths: xpaths } )
+
+puts livefootball.use
