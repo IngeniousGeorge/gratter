@@ -1,9 +1,5 @@
 require_relative 'gratter_class'
 
-lequipe = Gratter.new "http://www.lequipe.fr"
+lequipe = Gratter.new("http://www.livefootball.com", "//a[@class='btn btnHome']/@href")
 
-page = lequipe.simple_parse
-
-puts lequipe
-
-puts page
+puts lequipe.use
