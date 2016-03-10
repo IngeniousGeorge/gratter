@@ -20,6 +20,9 @@ gem 'rubygems-update', '~> 2.6', '>= 2.6.1'
 # Rspec
 gem 'rspec', '~> 3.0'
 
+# Guard for Rspec
+gem 'guard-rspec', require: false
+
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
