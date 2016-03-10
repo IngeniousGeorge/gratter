@@ -7,11 +7,11 @@ describe "gratter" do
   let(:inst) { Gratter.new "http://www.livefootball.com" }
 
   it "has a URL" do
-    raise unless Gratter.new("http://www.livefootball.com").url == "http://www.livefootball.com"
+    raise unless Gratter.new("http://www.livefootball.com").url == url
   end
 
   it "returns a Nokogiri document" do
-    doc = inst.simple_parse
+    doc = inst.use
     expect(doc.class).to eql Nokogiri::HTML::Document
   end
 
