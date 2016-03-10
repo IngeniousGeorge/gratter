@@ -39,13 +39,14 @@ end
 
 class Xpather
 
-  attr_reader :doc
+  attr_reader :doc, :xpath
   def initialize(doc, xpath)
-    @doc, @xpath = doc, xpath
+    @doc   = doc
+    @xpath = xpath
   end
 
   def xpath
-    @doc.xpath(@xpath)
+    return @doc.xpath(@xpath).length
   end
 
 end

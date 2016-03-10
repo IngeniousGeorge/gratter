@@ -22,16 +22,13 @@ describe "Single Classes" do
 
   let(:xpaths) { { :team => "//td[@class='ltn']/text()", :points => "//td[@class='ltp']/text()" } }
   let(:results) { { :team => "Team Name", :points => "PTS" } }
-  let(:doc) { @doc = parser.parse }
+  let(:parser) { Parser.new("http://www.livefootball.com/football/england/premier-league/league-table/") }
+  let(:xpather) { Xpather.new(Parser.new("http://www.livefootball.com/football/england/premier-league/league-table/").parse, xpaths) }
 
-  before(:all) do
-    parser = Parser.new("http://www.livefootball.com/football/england/premier-league/league-table/")
-    xpather = Xpather.new(@doc, xpaths)
-  end
 
   describe "Parser" do
     it "returns a Nokogiri document" do
-      expect(@doc.class).to eql Nokogiri::HTML::Document
+      expect(parser.parse.class).to eql Nokogiri::HTML::Document
     end
   end
 

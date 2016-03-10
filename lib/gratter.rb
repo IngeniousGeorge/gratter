@@ -5,14 +5,19 @@ xpaths = { :team => "//td[@class='ltn']/text()", :points => "//td[@class='ltp']/
 
 livefootball = Gratter.new( { url: url, xpaths: xpaths } )
 
-puts livefootball.use
+#puts livefootball.use
 
 parser = Parser.new("http://www.livefootball.com/football/england/premier-league/league-table/")
 doc = parser.parse
 
-puts doc
-
 xpather = Xpather.new(doc, xpaths)
-results = xpather.xpath
+xpather_doc = xpather.doc
+puts xpather_doc
 
-puts "results: " + results
+xp = xpather.xpath
+puts "xpath:"
+puts xp
+
+results = xpather.xpath
+puts "results:"
+puts results
