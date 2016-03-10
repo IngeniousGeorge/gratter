@@ -35,7 +35,7 @@ describe "Single Classes" do
 
   describe "Xpather" do
 
-    it "has a doc to work with" do
+    it "has a Nokogiri document to work with" do
       expect(xpather.doc.class).to eql Nokogiri::HTML::Document
     end
 

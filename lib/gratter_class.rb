@@ -13,12 +13,14 @@ class Gratter
     parser = Parser.new @url
     doc = parser.parse
     xpather = Xpather.new(doc, @xpath)
-    result = xpather.xpath
+    result = xpather.get_data
     return result
   end
 
-  # def do
-  #   "nothing"
+  # def do action
+  #   Every class at the lower level of abstraction can be used here
+  #   With action indicating which one is called upon
+  #   Checks for required arguments and returns exception accordingly
   # end
 
 end
