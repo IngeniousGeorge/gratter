@@ -79,10 +79,10 @@ class Matcher
     num_of_nodes = get_num_of_nodes
     result = []
     num_of_nodes.times { |x| result[x] = tags }
-    data.each do |tag, array|
+    data.each do |tag, array| #twice
       i = 0
-      array.each do |value|
-        result[i] = { tag => value }
+      array.each do |value| #20 times
+        result[i][tag] = value
         i += 1
       end
     end
