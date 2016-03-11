@@ -54,3 +54,23 @@ class Xpather
   end
 
 end
+
+class Matcher
+
+  attr_reader :data, :num_of_nodes
+  def initialize data
+    @data = data
+  end
+
+  def get_num_of_nodes
+    @num_of_nodes = 1
+  end
+
+  def match
+    data.each do |tag, val|
+      data[tag] = val[0].to_s
+    end
+    return [data]
+  end
+
+end

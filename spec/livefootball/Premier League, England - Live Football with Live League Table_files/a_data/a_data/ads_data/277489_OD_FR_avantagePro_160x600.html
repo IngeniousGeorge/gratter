@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><script type="text/javascript">
+    
+      (function() {
+        var relegateNavigation = '';
+        var handleClickTagMessage = function(e) {
+          try {
+            var eventData = JSON.parse(e.data);
+          } catch (err) {
+            return;
+          }
+          if (eventData.isInitClickTag) {
+            if (eventData.clickTags) {
+              for (var i = 0; i < eventData.clickTags.length; i++) {
+                var clkTag = eventData.clickTags[i];
+                window[clkTag.name] = clkTag.url;
+              }
+            } else if (eventData.clickTag) {
+              window.clickTag = eventData.clickTag;
+            }
+            relegateNavigation = eventData.relegateNavigation;
+          }
+        };
+
+        if (open.call) {
+          window.open = function(open) {
+            return function(url, name, features) {
+              if (relegateNavigation === 'parent') {
+                var message = {'clickTag': url, 'isPostClickTag': true};
+                parent.postMessage(JSON.stringify(message), '*');
+              } else {
+                var args = [url, name];
+                if (features) {
+                  args.push(features);
+                }
+                open.apply(window, args);
+              }
+            };
+          }(window.open);
+        }
+
+        if (window.addEventListener) {
+          window.addEventListener(
+              'message', handleClickTagMessage, false);
+        } else {
+          window.attachEvent('onmessage', handleClickTagMessage);
+        }
+      })();
+    
+  </script>
+  <title>300x250</title>
+  <meta charset="utf-8">
+  <meta name="generator" content="Google Web Designer 1.5.3.1209">
+  <meta name="template" content="Banner 2.3.2">
+  <meta name="environment" content="gwd-doubleclick">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="text/javascript">
+    var clickTag = "https://www.vistaprint.com";
+  </script>
+  <link href="277489_OD_FR_avantagePro_160x600_data/css.css" rel="stylesheet" type="text/css">
+
+  <style type="text/css">
+ 
+    
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0px;
+    }
+
+    .page-size {
+ 		
+		overflow: hidden;
+    
+	        width: 160px;
+      height: 600px;
+	  background-image:url(base.jpg);
+
+    }
+	
+	    .page-container {
+            position: absolute;
+            left: 0px;
+            top: 0px;
+
+	  font-family: MarkWebBold, Montserrat, Arial, Helvetica, sans-serif;
+	  width: 160px;
+      height: 600px;
+            text-align: center;
+	  
+    }
+    .logo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+    }
+    .txt {
+      position: absolute;
+         top: 150px;
+        left: 30px;
+
+    }
+
+     
+    .btncenter {
+      position: absolute;
+      top: 235px;
+        left: 15px;
+    }
+      button {
+          margin: 0 auto; 
+      }
+    .btn {
+      padding: 6px 8px;
+      border: 0px;
+      width: 110px;
+      margin: 0 auto;
+      box-shadow: rgb(92, 102, 111) 0px 2px;
+      border-radius: 1px;
+      color: rgb(92, 102, 111);
+      display: block;
+      font-family: MarkWebLight, Montserrat, Helvetica, sans-serif;
+      font-size: 12px;
+      text-align: center;
+      text-decoration: none;
+      background-color: rgb(256, 256, 256);
+    }
+
+.btn:hover {
+      box-shadow: rgb(27, 64, 99) 0px 2px;
+      color: rgb(255, 255, 255);
+      background-color: rgb(0, 97, 150);
+    }
+
+.btn:active {}#btn:hover {
+      cursor: pointer;
+  }
+    .card {
+       position: absolute;
+      bottom: 82px;
+        right: 0px;
+    }
+ 
+    #card2 {
+      animation: appear 6s ease-in-out 4s 5 forwards;
+      opacity: 0;
+    }
+       #card1 {
+      animation: appear 6s ease-in-out 2s 5 forwards;
+      opacity: 0;
+    }
+
+    @keyframes appear {
+      0% {
+        opacity: 0;
+      }
+          32% {
+        opacity: 0;
+      }
+      33% {
+        opacity: 1;
+      }
+        65% {
+        opacity: 1;
+      }
+        66% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 0;
+      }
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+    <a href="javascript:window.open(window.clickTag)">
+
+      <div class="page-size">
+        <div class="page-container">
+
+            <div class="card" id="card1">
+        
+              <img src="277489_OD_FR_avantagePro_160x600_data/postcard.jpg">
+            </div>
+            <div class="card" id="card2">
+              <img src="277489_OD_FR_avantagePro_160x600_data/postcard2.jpg">
+            </div>
+            <div class="btncenter"><button class="btn">En savoir plus</button></div>
+            
+
+
+		</div>
+      </div>
+    </a>
+  
+
+
+</body></html>
