@@ -61,14 +61,14 @@ describe "gratter" do
       it "returns an array of size 1 with inside a hash of symbol => strings instead of an hash of symbol => array if all tags returned just one node" do
         # pending 'input = { :tagA => ["valA"], :tagB => ["valB"] }
         #   output = { :tagA => "valA", :tagB => "valB" }'
-        expect(matcher_single_node.match).to eq(matcher_result_single_node)
+        expect(matcher_single_node.match_single_nodes).to eq(matcher_result_single_node)
       end
 
       it "returns an array(size=num_of_nodes) of hashes(single pair always) instead of an hash of arrays" do
         # pending 'input: { :tagA => ["val1A", "val2A"], :tagB => ["val1B", "val2B"] }
         #   output = [ [1] => { :tagA => "val1A", :tagB => "val1B" },
         #              [2] => { :tagA => "val2A", :tagB => "val2B" }'
-        expect(matcher.match).to eq(matcher_result)
+        expect(matcher.match_many_nodes).to eq(matcher_result)
       end
 
       it "returns an array of hashed with tags returning a single value being duplicated in all hashes" do

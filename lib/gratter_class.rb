@@ -62,11 +62,34 @@ class Matcher
     @data = data
   end
 
-  def get_num_of_nodes
-    @num_of_nodes = 1
+  def get_tags
+    tags = { :team => nil, :points => nil }
   end
 
-  def match
+  def get_num_of_nodes
+    num_of_nodes = 20
+  end
+
+  def create_full_arrays_for_single_nodes
+
+  end
+
+  def match_many_nodes
+    tags = get_tags
+    num_of_nodes = get_num_of_nodes
+    result = []
+    num_of_nodes.times { |x| result[x] = tags }
+    data.each do |tag, array|
+      i = 0
+      array.each do |value|
+        result[i] = { tag => value }
+        i += 1
+      end
+    end
+    return result
+  end
+
+  def match_single_nodes
     data.each do |tag, val|
       data[tag] = val[0].to_s
     end
