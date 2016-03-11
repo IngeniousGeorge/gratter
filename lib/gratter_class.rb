@@ -4,24 +4,19 @@ require 'net/http'
 class Gratter
 
   attr_reader :url
+  attr_reader :xpaths
   def initialize(args)
     @url    = args[:url]
-    @xpath  = args[:xpath] || {}
+    @xpaths  = args[:xpaths] #|| {}
   end
 
   def use
     parser = Parser.new @url
     doc = parser.parse
-    xpather = Xpather.new(doc, @xpath)
+    xpather = Xpather.new(doc, @xpaths)
     result = xpather.get_data
     return result
   end
-
-  # def do action
-  #   Every class at the lower level of abstraction can be used here
-  #   With action indicating which one is called upon
-  #   Checks for required arguments and returns exception accordingly
-  # end
 
 end
 
@@ -42,15 +37,15 @@ end
 
 class Xpather
 
-  attr_reader :doc, :xpath
-  def initialize(doc, xpath)
+  attr_reader :doc, :xpaths
+  def initialize(doc, xpaths)
     @doc   = doc
-    @xpath = xpath
+    @xpaths = xpaths
   end
 
   def get_data
     result = {}
-    xpath.each do |tag, xp|
+    xpaths.each do |tag, xp|
       array = @doc.xpath(xp).to_a
       array.map! { |node| node.to_s }
       result[tag] = array
