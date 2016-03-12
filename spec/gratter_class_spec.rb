@@ -64,7 +64,7 @@ describe "gratter" do
         expect(matcher_single_node.match_single_nodes).to eq(matcher_result_single_node)
       end
 
-      it "returns an array(size=num_of_nodes) of hashes(single pair always) instead of an hash of arrays" do
+      it "returns an array(size=num_of_nodes) of hashes(tag => value pairs) instead of an hash of arrays" do
         # pending 'input: { :tagA => ["val1A", "val2A"], :tagB => ["val1B", "val2B"] }
         #   output = [ [1] => { :tagA => "val1A", :tagB => "val1B" },
         #              [2] => { :tagA => "val2A", :tagB => "val2B" }'
