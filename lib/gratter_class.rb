@@ -62,10 +62,6 @@ class Matcher
     @data = data
   end
 
-  def get_tags
-    tags = { :team => nil, :points => nil }
-  end
-
   def get_num_of_nodes
     num_of_nodes = 20
   end
@@ -75,7 +71,6 @@ class Matcher
   end
 
   def match_many_nodes
-    tags = get_tags
     num_of_nodes = get_num_of_nodes
     result = []
     result = Array.new(num_of_nodes) { {} }
