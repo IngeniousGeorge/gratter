@@ -66,7 +66,7 @@ class Matcher
 
   def match
     if @max_num_of_nodes == @min_num_of_nodes then
-      if max_num_of_nodes == 1 then
+      if @max_num_of_nodes == 1 then
         result = self.match_single_nodes
         return result
       else
@@ -74,8 +74,8 @@ class Matcher
         return result
       end
     else #=> @max_num_of_nodes != @min_num_of_nodes
-      if all_arrays_same_size then
-        create_full_arrays_for_single_nodes
+      if all_arrays_same_size? then
+        @data = create_full_arrays_for_single_nodes
         result = self.match_many_nodes
         return result
       else
@@ -89,27 +89,42 @@ class Matcher
   end
 
   def get_max_num_of_nodes
-    20
+    sizes = []
+    data.each do |tag,value|
+      sizes << value.size unless value.class != Array
+    end
+    sizes.max
   end
 
   def get_min_num_of_nodes
-    1
+    sizes = []
+    data.each do |tag,value|
+      sizes << value.size unless value.class != Array
+    end
+    sizes.max
   end
 
-  def all_arrays_same_size
-
+  def all_arrays_same_size?
+    sizes = []
+    data.each do |tag,value|
+      sizes << value.size unless value.class != Array
+    end
+    sizes.uniq.size == 1
   end
 
   def create_full_arrays_for_single_nodes
     data.each do |tag,value|
-      data[tag] = Array.new(@max_num_of_nodes) { value } if value.class == String
+      if value.size == 1 then
+        data[tag] = Array.new(@max_num_of_nodes) { value[0].to_s }
+      end
     end
+    return data
   end
 
   def match_many_nodes
     result = []
     result = Array.new(@max_num_of_nodes) { {} }
-    data.each do |tag, array|
+    @data.each do |tag, array|
       array.each_with_index do |value,index|
         result[index][tag] = value
       end

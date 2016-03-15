@@ -9,20 +9,15 @@ livefootball = Gratter.new( { url: url, xpaths: xpaths } )
 
 
 parser = Parser.new("http://www.livefootball.com/football/england/premier-league/league-table/")
+
 doc = parser.parse
 
 xpather = Xpather.new(doc, xpaths)
-#xpather_doc = xpather.doc
-#puts xpather_doc
-
-#xp = xpather.xpath
-# puts "xpath:"
-# puts xp
 
 results = xpather.get_data
-# puts "results:"
-#puts results
-
-
 
 matcher = Matcher.new(results)
+
+array = matcher.create_full_arrays_for_single_nodes
+
+puts array
