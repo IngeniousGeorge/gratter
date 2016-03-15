@@ -1,7 +1,7 @@
 require_relative 'gratter_class'
 
 url = "http://www.livefootball.com/football/england/premier-league/league-table/"
-xpaths = { :team => "(//td[@class='ltn'])[position()>1]/text()", :points => "(//td[@class='ltp'])[position()>1]/text()" }
+xpaths = { :team => "(//td[@class='ltn'])[position()>1]/text()", :points => "(//td[@class='ltp'])[position()>1]/text()", :league => "//div[@class='header']/h2/text()" }
 
 livefootball = Gratter.new( { url: url, xpaths: xpaths } )
 
@@ -26,7 +26,3 @@ results = xpather.get_data
 
 
 matcher = Matcher.new(results)
-
-final = matcher.match_many_nodes
-
-puts final

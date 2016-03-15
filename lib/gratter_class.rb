@@ -60,20 +60,55 @@ class Matcher
   attr_reader :data, :num_of_nodes
   def initialize data
     @data = data
+    @max_num_of_nodes = get_max_num_of_nodes
+    @min_num_of_nodes = get_min_num_of_nodes
   end
 
-  def get_num_of_nodes
-    num_of_nodes = 20
+  def match
+    if @max_num_of_nodes == @min_num_of_nodes then
+      if max_num_of_nodes == 1 then
+        result = self.match_single_nodes
+        return result
+      else
+        result = self.match_many_nodes
+        return result
+      end
+    else #=> @max_num_of_nodes != @min_num_of_nodes
+      if all_arrays_same_size then
+        create_full_arrays_for_single_nodes
+        result = self.match_many_nodes
+        return result
+      else
+        raise "different array sizes"
+      end
+    end
+  end
+
+  def data
+    @data
+  end
+
+  def get_max_num_of_nodes
+    20
+  end
+
+  def get_min_num_of_nodes
+    1
+  end
+
+  def all_arrays_same_size
+
   end
 
   def create_full_arrays_for_single_nodes
-
+    data.each do |tag,value|
+      data[tag] = Array.new(@max_num_of_nodes) { value } if value.class == String
+    end
   end
 
   def match_many_nodes
-    num_of_nodes = get_num_of_nodes
     result = []
-    result = Array.new(num_of_nodes) { {} }
+    result = Array.new(@max_num_of_nodes) { {} }
     data.each do |tag, array|
       array.each_with_index do |value,index|
         result[index][tag] = value
