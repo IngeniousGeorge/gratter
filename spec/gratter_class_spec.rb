@@ -56,44 +56,58 @@ describe "gratter" do
 
     describe "Matcher" do
 
-      #multi nodes results
+      context "single nodes" do
 
-      let(:xpather_output) { {:team=>["Leicester City", "Tottenham Hotspur", "Arsenal", "Manchester City", "West Ham United", "Manchester United", "Southampton", "Liverpool", "Stoke City", "Chelsea", "West Bromwich Albion", "Everton", "AFC Bournemouth", "Watford", "Crystal Palace", "Swansea City", "Sunderland", "Norwich City", "Newcastle United", "Aston Villa"], :points=>["63", "58", "52", "51", "49", "47", "44", "44", "43", "40", "39", "38", "38", "37", "33", "33", "25", "25", "24", "16"]} }
-      let(:matcher) { Matcher.new(xpather_output) }
-      let(:matcher_result) { [ {:team=>"Leicester City", :points=>"63"}, {:team=>"Tottenham Hotspur", :points=>"58"}, {:team=>"Arsenal", :points=>"52"}, {:team=>"Manchester City", :points=>"51"}, {:team=>"West Ham United", :points=>"49"}, {:team=>"Manchester United", :points=>"47"}, {:team=>"Southampton", :points=>"44"}, {:team=>"Liverpool", :points=>"44"}, {:team=>"Stoke City", :points=>"43"}, {:team=>"Chelsea", :points=>"40"}, {:team=>"West Bromwich Albion", :points=>"39"}, {:team=>"Everton", :points=>"38"}, {:team=>"AFC Bournemouth", :points=>"38"}, {:team=>"Watford", :points=>"37"}, {:team=>"Crystal Palace", :points=>"33"}, {:team=>"Swansea City", :points=>"33"}, {:team=>"Sunderland", :points=>"25"}, {:team=>"Norwich City", :points=>"25"}, {:team=>"Newcastle United", :points=>"24"}, {:team=>"Aston Villa", :points=>"16"} ] }
-      #single node vars
-      let(:xpaths_single_node) { { :team => "(//td[@class='ltn'])[1]/text()", :points => "(//td[@class='ltp'])[1]/text()" } }
-      let(:xpather_output_single_node) { {:team=>["Leicester City"], :points=>["63"]} }
-      let(:matcher_single_node) { Matcher.new(xpather_output_single_node) }
-      let(:matcher_result_single_node) { [ { :team=>"Leicester City", :points=>"63" } ] }
-      #mixed results vars
-      let(:xpaths_mixed) { { :team => "(//td[@class='ltn'])[position()>1]/text()", :points => "(//td[@class='ltp'])[position()>1]/text()", :league => "//div[@class='header']/h2/text()" } }
-      let(:xpather_mixed_output) { {:team=>["Leicester City", "Tottenham Hotspur", "Arsenal", "Manchester City", "West Ham United", "Manchester United", "Southampton", "Liverpool", "Stoke City", "Chelsea", "West Bromwich Albion", "Everton", "AFC Bournemouth", "Watford", "Crystal Palace", "Swansea City", "Sunderland", "Norwich City", "Newcastle United", "Aston Villa"], :points=>["63", "58", "52", "51", "49", "47", "44", "44", "43", "40", "39", "38", "38", "37", "33", "33", "25", "25", "24", "16"], :league=>"England - Premier League"} }
-      let(:matcher_mixed) { Matcher.new(xpather_mixed_output) }
-      let(:matcher_mixed_result) { [ {:team=>"Leicester City", :points=>"63", :league=>"England - Premier League"}, {:team=>"Tottenham Hotspur", :points=>"58", :league=>"England - Premier League"}, {:team=>"Arsenal", :points=>"52", :league=>"England - Premier League"}, {:team=>"Manchester City", :points=>"51", :league=>"England - Premier League"}, {:team=>"West Ham United", :points=>"49", :league=>"England - Premier League"}, {:team=>"Manchester United", :points=>"47", :league=>"England - Premier League"}, {:team=>"Southampton", :points=>"44", :league=>"England - Premier League"}, {:team=>"Liverpool", :points=>"44", :league=>"England - Premier League"}, {:team=>"Stoke City", :points=>"43", :league=>"England - Premier League"}, {:team=>"Chelsea", :points=>"40", :league=>"England - Premier League"}, {:team=>"West Bromwich Albion", :points=>"39", :league=>"England - Premier League"}, {:team=>"Everton", :points=>"38", :league=>"England - Premier League"}, {:team=>"AFC Bournemouth", :points=>"38", :league=>"England - Premier League"}, {:team=>"Watford", :points=>"37", :league=>"England - Premier League"}, {:team=>"Crystal Palace", :points=>"33", :league=>"England - Premier League"}, {:team=>"Swansea City", :points=>"33", :league=>"England - Premier League"}, {:team=>"Sunderland", :points=>"25", :league=>"England - Premier League"}, {:team=>"Norwich City", :points=>"25", :league=>"England - Premier League"}, {:team=>"Newcastle United", :points=>"24", :league=>"England - Premier League"}, {:team=>"Aston Villa", :points=>"16", :league=>"England - Premier League"} ] }
+        let(:xpather_single_output) { { :tagA => 'valA', :tagB => 'valB', :tagC => 'valC' } }
+        let(:single_matcher) { Matcher.new(xpather_single_output) }
 
+        it "returns an array with 1 hash in it if given single nodes input" do
+          expect(single_matcher.match.size).to eq(1)
+        end
 
-      it "has an array to work with" do
-        expect(matcher.data).to eq(xpather_output)
+        it "returns an array having 1 hash whose size is the same as number of tags, if given single nodes input" do
+          expect(single_matcher.match[0].size).to eq(xpather_single_output.size)
+        end
+
+        # it "checking => single_nodes_only?" do
+        #   expect(single_matcher.single_nodes_only?).to eq(true)
+        # end
+
       end
 
-      it "returns an array of size 1 with inside a hash of symbol => strings instead of an hash of symbol => array if all tags returned just one node" do
-        # pending 'input = { :tagA => ["valA"], :tagB => ["valB"] }
-        #   output = { :tagA => "valA", :tagB => "valB" }'
-        expect(matcher_single_node.match).to eq(matcher_result_single_node)
+      context "arrays differ in size" do
+
+        let(:xpather_faulty_output) { { :tagA => ['valA1', 'valA2', 'valA3'], :tagB => ['valB1', 'valB2'], :tagC => 'valC' } }
+        let(:faulty_matcher) { Matcher.new(xpather_faulty_output) }
+
+        it "returns an exception if arrays differ in size" do
+          expect(faulty_matcher.match).to raise_exception("Invalid data: Node lists are not of the same size and cannot be matched")
+        end
+
       end
 
-      it "returns an array(size=num_of_nodes) of hashes(tag => value pairs) instead of an hash of arrays" do
-        # pending 'input: { :tagA => ["val1A", "val2A"], :tagB => ["val1B", "val2B"] }
-        #   output = [ [1] => { :tagA => "val1A", :tagB => "val1B" },
-        #              [2] => { :tagA => "val2A", :tagB => "val2B" }'
-        expect(matcher.match_many_nodes).to eq(matcher_result)
-      end
+      context "mixed" do
 
-      it "returns an array of hashes, with tags returning a single value being duplicated in all hashes" do
-        # pending 'input: { :tagA => ["val1A", "val2A"], :tagB => "val1B" }
-        #   output = [ {:tagA => "val1A"}, {:tagA => "val2A"}, {:tagB => "val1B"}, {:tagB => "val1B"}, ]'
-        expect(matcher_mixed.match).to eq(matcher_mixed_result)
+        let(:xpather_output) { { :tagA => ['valA1', 'valA2', 'valA3'], :tagB => ['valB1', 'valB2', 'valB3'], :tagC => 'valC' } }
+        let(:expected_max_num_of_nodes) { 3 }
+        let(:matcher) { Matcher.new(xpather_output) }
+
+        it "has a hash to work with" do
+          expect(matcher.data.class).to be(Hash)
+        end
+
+        it "returns an array of size expected_max_num_of_nodes" do
+          expect(matcher.match.size).to eq(expected_max_num_of_nodes)
+        end
+
+        it "returns an array of hashes whose size is the same as xpather_output/number of tags" do
+          expect(matcher.match[0].size).to eq(xpather_output.size)
+        end
+
+        # it "checking => match" do
+        #   expect(matcher.match).to eq(1)
+        # end
+
       end
 
     end
@@ -109,3 +123,7 @@ describe "gratter" do
   end
 
 end
+
+# it "checking => create_full_arrays_for_single_nodes" do
+#   expect(matcher.create_full_arrays_for_single_nodes).to eq(1)
+# end

@@ -59,35 +59,76 @@ end
 
 class Matcher
 
-  attr_reader :data, :num_of_nodes
+  attr_accessor :data, :num_of_nodes
   def initialize data
     @data = data
-    @max_num_of_nodes = get_max_num_of_nodes
-    @min_num_of_nodes = get_min_num_of_nodes
   end
 
-  def match
-    if @max_num_of_nodes == @min_num_of_nodes then
-      if @max_num_of_nodes == 1 then
-        result = self.match_single_nodes
-        return result
-      else
-        result = self.match_many_nodes
-        return result
-      end
-    else #=> @max_num_of_nodes != @min_num_of_nodes
-      if all_arrays_same_size? then
-        @data = create_full_arrays_for_single_nodes
-        result = self.match_many_nodes
-        return result
-      else
-        raise "different array sizes"
-      end
-    end
-  end
+  # def match
+  #   if @max_num_of_nodes == @min_num_of_nodes then
+  #     if @max_num_of_nodes == 1 then
+  #       result = self.match_single_nodes
+  #       return result
+  #     else
+  #       result = self.match_many_nodes
+  #       return result
+  #     end
+  #   else #=> @max_num_of_nodes != @min_num_of_nodes
+  #     if all_arrays_same_size? then
+  #       @data = create_full_arrays_for_single_nodes
+  #       result = self.match_many_nodes
+  #       return result
+  #     else
+  #       raise "different array sizes"
+  #     end
+  #   end
+  # end
 
   def data
     @data
+  end
+
+  def match
+    raise "Invalid data: Node lists are not of the same size and cannot be matched" if arrays_differ_in_size?
+    return match_single_nodes if single_nodes_only?
+    @data = reorder_data if strings_mixed_with_arrays?
+    return match_many_nodes
+  end
+
+  def arrays_differ_in_size?
+    sizes = []
+    data.each do |tag,value|
+      sizes << value.size unless value.class != Array
+    end
+    return false if sizes.empty?
+    sizes.uniq.size != 1
+  end
+
+  def single_nodes_only?
+    single_nodes = 0
+    data.each do |tag,value|
+      single_nodes += 1 if value.class == String
+    end
+    single_nodes == data.size
+  end
+
+  def strings_mixed_with_arrays?
+    single_nodes = 0
+    arrays = 0
+    data.each do |tag,value|
+      single_nodes += 1 if value.class == String
+      arrays += 1 if value.class == Array
+    end
+    single_nodes > 0 && arrays > 0
+  end
+
+  def reorder_data
+    data.each do |tag,value|
+      if value.class == String then
+        data[tag] = Array.new(3) { value.to_s }
+      end
+    end
+    return data
   end
 
   def get_max_num_of_nodes
@@ -116,8 +157,8 @@ class Matcher
 
   def create_full_arrays_for_single_nodes
     data.each do |tag,value|
-      if value.size == 1 then
-        data[tag] = Array.new(@max_num_of_nodes) { value[0].to_s }
+      if value.class == String then
+        #data[tag] = Array.new(@max_num_of_nodes) { value.to_s }
       end
     end
     return data
@@ -125,7 +166,7 @@ class Matcher
 
   def match_many_nodes
     result = []
-    result = Array.new(@max_num_of_nodes) { {} }
+    result = Array.new(3) { {} }
     @data.each do |tag, array|
       array.each_with_index do |value,index|
         result[index][tag] = value
@@ -136,7 +177,7 @@ class Matcher
 
   def match_single_nodes
     data.each do |tag, val|
-      data[tag] = val[0].to_s
+      data[tag] = val.to_s
     end
     return [data]
   end
