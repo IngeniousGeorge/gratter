@@ -39,6 +39,10 @@ describe "gratter" do
     expect(data.size).to eql(expected_max_num_of_nodes)
   end
 
+  it "checking => data" do
+    expect(data).to eq(1)
+  end
+
   describe "Single Classes" do
 
     describe "Parser" do
@@ -83,9 +87,9 @@ describe "gratter" do
         expect(data.values[0]).not_to eq([])
       end
 
-      # it "checking => data" do
-      #   expect(data).to eq(1)
-      # end
+      it "checking => data" do
+        expect(data).to eq(1)
+      end
 
     end
 
