@@ -64,26 +64,6 @@ class Matcher
     @data = data
   end
 
-  # def match
-  #   if @max_num_of_nodes == @min_num_of_nodes then
-  #     if @max_num_of_nodes == 1 then
-  #       result = self.match_single_nodes
-  #       return result
-  #     else
-  #       result = self.match_many_nodes
-  #       return result
-  #     end
-  #   else #=> @max_num_of_nodes != @min_num_of_nodes
-  #     if all_arrays_same_size? then
-  #       @data = create_full_arrays_for_single_nodes
-  #       result = self.match_many_nodes
-  #       return result
-  #     else
-  #       raise "different array sizes"
-  #     end
-  #   end
-  # end
-
   def data
     @data
   end

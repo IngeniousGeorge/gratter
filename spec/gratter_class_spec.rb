@@ -3,9 +3,23 @@ require_relative "../lib/gratter_class.rb"
 
 describe "gratter" do
 
-  let(:url) { "http://www.livefootball.com/football/england/premier-league/league-table/" }
-  let(:xpaths) { { :team => "(//td[@class='ltn'])[position()>1]/text()", :points => "(//td[@class='ltp'])[position()>1]/text()" } }
-  let(:expected_max_num_of_nodes) { 20 }
+  ## Livefootball
+  #let(:url) { "http://www.livefootball.com/football/england/premier-league/league-table/" }
+  #let(:xpaths) { { :team => "(//td[@class='ltn'])[position()>1]/text()", :points => "(//td[@class='ltp'])[position()>1]/text()" } }
+  #let(:expected_max_num_of_nodes) { 20 }
+
+  ## Livescore
+  # let(:url) { "http://www.livescore.com/soccer/england/premier-league/" }
+  # let(:xpaths) { { :team => "//div[@class='team']/text()", :points => "//div[@class='pts tot']/text()" } }
+  # let(:expected_max_num_of_nodes) { 20 }
+
+  ## Pitchfork
+  let(:url) { "http://pitchfork.com/reviews/albums/21631-no-one-deserves-happiness/" }
+  let(:xpaths) { { :album => "//h1[@class='review-title']/text()", :artist => "//h2[@class='artists']//a/text()", :rating => "//span[@class='score']/text()" } }
+  let(:expected_max_num_of_nodes) { 1 }
+
+
+  ## Shared Params
   let(:instance) { Gratter.new( { :url => url, :xpaths => xpaths } ) }
   let(:data) { instance.use }
 
@@ -39,8 +53,20 @@ describe "gratter" do
 
     describe "Xpather" do
 
-      let(:xpaths) { { :tag1 => "//div", :tag2 => "//span" } }
-      let(:xpather) { Xpather.new(Parser.new("http://www.duckduckgo.com").parse, xpaths) }
+      ## Livefootball
+      # let(:xpather) { Xpather.new(Parser.new("http://www.livefootball.com/football/england/premier-league/league-table/").parse, xpaths) }
+      # let(:xpaths) { { :team => "(//td[@class='ltn'])[position()>1]/text()", :points => "(//td[@class='ltp'])[position()>1]/text()" } }
+
+      ## Livescore
+      # let(:xpather) { Xpather.new(Parser.new("http://www.livescore.com/soccer/england/premier-league/").parse, xpaths) }
+      # let(:xpaths) { { :team => "//div[@class='team']/text()", :points => "//div[@class='pts tot']/text()" } }
+
+      ## Pitchfork
+      let(:xpather) { Xpather.new(Parser.new("http://pitchfork.com/reviews/albums/21631-no-one-deserves-happiness/").parse, xpaths) }
+      let(:xpaths) { { :album => "//h1[@class='review-title']/text()", :artist => "//h2[@class='artists']//a/text()", :rating => "//span[@class='score']/text()" } }
+
+
+      ## Shared Params
       let(:data) { xpather.get_data }
 
       it "has a Nokogiri document to work with" do
@@ -51,6 +77,15 @@ describe "gratter" do
         expect(data.class).to eql(Hash)
         expect(data.size).to eql(xpaths.size)
       end
+
+      it "returns a non-empty hash" do
+        expect(data.first).not_to eq(nil)
+        expect(data.values[0]).not_to eq([])
+      end
+
+      # it "checking => data" do
+      #   expect(data).to eq(1)
+      # end
 
     end
 
@@ -123,7 +158,3 @@ describe "gratter" do
   end
 
 end
-
-# it "checking => create_full_arrays_for_single_nodes" do
-#   expect(matcher.create_full_arrays_for_single_nodes).to eq(1)
-# end
