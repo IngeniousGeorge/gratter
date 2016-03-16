@@ -14,8 +14,10 @@ class Gratter
     parser = Parser.new @url
     doc = parser.parse
     xpather = Xpather.new(doc, @xpaths)
-    result = xpather.get_data
-    return result
+    xpather_result = xpather.get_data
+    matcher = Matcher.new(xpather_result)
+    matcher_result = matcher.match
+    return matcher_result
   end
 
 end

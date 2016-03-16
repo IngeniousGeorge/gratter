@@ -6,33 +6,30 @@ describe "gratter" do
   let(:url) { "http://www.livefootball.com/football/england/premier-league/league-table/" }
   let(:xpaths) { { :team => "(//td[@class='ltn'])[position()>1]/text()", :points => "(//td[@class='ltp'])[position()>1]/text()" } }
   let(:instance) { Gratter.new( { :url => url, :xpaths => xpaths } ) }
+  let(:data) { instance.use }
 
   it "has a URL" do
     expect(instance.url).to match(/http:\/\/.*/)
   end
 
   it "has tags and xpaths" do
-    expect(instance.xpaths).to eq( { :team => "(//td[@class='ltn'])[position()>1]/text()", :points => "(//td[@class='ltp'])[position()>1]/text()" } )
+    expect(instance.xpaths).to be_kind_of(Hash)
   end
 
-  it "returns a hash with tags as keys and arrays of the values as value" do
-    data = instance.use
-    expect(data[:team].class).to be(Array)
-    expect(data[:team].include?("Leicester City")).to be_truthy
-    expect(data[:team].include?("Manchester United")).to be_truthy
-    expect(data[:points][10]).to match(/\d{2}/)
-    expect(data[:points][0]).to be >= data[:points][19]
+  it "returns an array" do
+    expect(data.class).to be(Array)
   end
 
   describe "Single Classes" do
 
     describe "Parser" do
 
-      let(:parser) { Parser.new("http://www.livefootball.com/football/england/premier-league/league-table/") }
+      let(:parser) { Parser.new("http://www.google.com") }
 
       it "returns a Nokogiri document on parse" do
-        expect(parser.parse.class).to eql Nokogiri::HTML::Document
+        expect(parser.parse.class).to eql(Nokogiri::HTML::Document)
       end
+
     end
 
     describe "Xpather" do
