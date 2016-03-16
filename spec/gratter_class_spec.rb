@@ -8,7 +8,7 @@ describe "gratter" do
   let(:instance) { Gratter.new( { :url => url, :xpaths => xpaths } ) }
 
   it "has a URL" do
-    expect(instance.url).to eq(url)
+    expect(instance.url).to match(/http:\/\/.*/)
   end
 
   it "has tags and xpaths" do
