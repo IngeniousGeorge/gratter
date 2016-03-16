@@ -38,9 +38,9 @@ describe "gratter" do
     expect(data.size).to eql(expected_max_num_of_nodes)
   end
 
-  it "checking => data" do
-    expect(data).to eq(1)
-  end
+  # it "checking => data" do
+  #   expect(data).to eq(1)
+  # end
 
   describe "Single Classes" do
 
@@ -62,8 +62,7 @@ describe "gratter" do
 
       ## Livescore
       let(:xpather) { Xpather.new(Parser.new("http://www.livescore.com/soccer/england/premier-league/").parse, xpaths) }
-      let(:xpaths) { { :team => "//div[@class='team']/text()", :points => "//div[@class='pts tot']/text()", :league => "//div[@class='left']//a//text()" } }
-
+      let(:xpaths) { { :team => "(//div[@class='team'])[position()>1]/text()", :points => "(//div[@class='pts tot'])[position()>1]/text()", :league => "//div[@class='left']//a//text()" } }
       ## Pitchfork
       # let(:xpather) { Xpather.new(Parser.new("http://pitchfork.com/reviews/albums/21631-no-one-deserves-happiness/").parse, xpaths) }
       # let(:xpaths) { { :album => "//h1[@class='review-title']/text()", :artist => "//h2[@class='artists']//a/text()", :rating => "//span[@class='score']/text()" } }
@@ -121,7 +120,7 @@ describe "gratter" do
 
       context "mixed" do
 
-        let(:xpather_output) { { :tagA => ['valA1', 'valA2', 'valA3'], :tagB => ['valB1', 'valB2', 'valB3'], :tagC => ['valC'] } }
+        let(:xpather_output) { { :tagA => ["valA1", "valA2", "valA3"], :tagB => ["valB1", "valB2", "valB3"], :tagC => ["valC"] } }
         let(:expected_max_num_of_nodes) { 3 }
         let(:matcher) { Matcher.new(xpather_output) }
 
@@ -138,7 +137,7 @@ describe "gratter" do
         end
 
         # it "checking => match" do
-        #   expect(matcher.match).to eq(1)
+        #   expect(matcher.match).to eq(8)
         # end
 
       end

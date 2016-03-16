@@ -67,8 +67,8 @@ class Matcher
   def match
     sizes = get_arrays_sizes
     check_for_uniform_arrays(sizes)
-    make_arrays_uniform(sizes) if sizes.max[1] != sizes.min[1]
-    match_nodes(sizes.max[1])
+    make_arrays_uniform(sizes) if sizes.values.max != sizes.values.min
+    match_nodes(sizes.values.max)
   end
 
     def get_arrays_sizes
@@ -84,7 +84,7 @@ class Matcher
     end
 
     def make_arrays_uniform sizes
-      max = sizes.max[1]
+      max = sizes.values.max
       data.each do |tag,value|
         if value.size == 1 then
           array = []
