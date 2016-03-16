@@ -99,7 +99,7 @@ class Matcher
       data.each do |tag, array|
         array.each_with_index do |value,index|
           hash = { tag => value }
-          result.at(index).merge!( hash ) #= [tag] = value # p tag, array, value, index => :album / ["No One Deserves Happiness"] / "No One Deserves Happiness" / 0
+          result.at(index).merge!( hash ) # p tag, array, value, index => :album / ["No One Deserves Happiness"] / "No One Deserves Happiness" / 0
         end
       end
       return result

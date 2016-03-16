@@ -9,15 +9,14 @@ describe "gratter" do
   #let(:expected_max_num_of_nodes) { 20 }
 
   ## Livescore
-  # let(:url) { "http://www.livescore.com/soccer/england/premier-league/" }
-  # let(:xpaths) { { :team => "//div[@class='team']/text()", :points => "//div[@class='pts tot']/text()" } }
-  # let(:expected_max_num_of_nodes) { 20 }
+  let(:url) { "http://www.livescore.com/soccer/england/premier-league/" }
+  let(:xpaths) { { :team => "(//div[@class='team'])[position()>1]/text()", :points => "(//div[@class='pts tot'])[position()>1]/text()", :league => "//div[@class='left']//a//text()" } }
+  let(:expected_max_num_of_nodes) { 20 }
 
   ## Pitchfork
-  let(:url) { "http://pitchfork.com/reviews/albums/21631-no-one-deserves-happiness/" }
-  let(:xpaths) { { :album => "//h1[@class='review-title']/text()", :artist => "//h2[@class='artists']//a/text()", :rating => "//span[@class='score']/text()" } }
-  let(:expected_max_num_of_nodes) { 1 }
-
+  # let(:url) { "http://pitchfork.com/reviews/albums/21631-no-one-deserves-happiness/" }
+  # let(:xpaths) { { :album => "//h1[@class='review-title']/text()", :artist => "//h2[@class='artists']//a/text()", :rating => "//span[@class='score']/text()" } }
+  # let(:expected_max_num_of_nodes) { 1 }
 
   ## Shared Params
   let(:instance) { Gratter.new( { :url => url, :xpaths => xpaths } ) }
@@ -62,13 +61,12 @@ describe "gratter" do
       # let(:xpaths) { { :team => "(//td[@class='ltn'])[position()>1]/text()", :points => "(//td[@class='ltp'])[position()>1]/text()" } }
 
       ## Livescore
-      # let(:xpather) { Xpather.new(Parser.new("http://www.livescore.com/soccer/england/premier-league/").parse, xpaths) }
-      # let(:xpaths) { { :team => "//div[@class='team']/text()", :points => "//div[@class='pts tot']/text()" } }
+      let(:xpather) { Xpather.new(Parser.new("http://www.livescore.com/soccer/england/premier-league/").parse, xpaths) }
+      let(:xpaths) { { :team => "//div[@class='team']/text()", :points => "//div[@class='pts tot']/text()", :league => "//div[@class='left']//a//text()" } }
 
       ## Pitchfork
-      let(:xpather) { Xpather.new(Parser.new("http://pitchfork.com/reviews/albums/21631-no-one-deserves-happiness/").parse, xpaths) }
-      let(:xpaths) { { :album => "//h1[@class='review-title']/text()", :artist => "//h2[@class='artists']//a/text()", :rating => "//span[@class='score']/text()" } }
-
+      # let(:xpather) { Xpather.new(Parser.new("http://pitchfork.com/reviews/albums/21631-no-one-deserves-happiness/").parse, xpaths) }
+      # let(:xpaths) { { :album => "//h1[@class='review-title']/text()", :artist => "//h2[@class='artists']//a/text()", :rating => "//span[@class='score']/text()" } }
 
       ## Shared Params
       let(:data) { xpather.get_data }
@@ -87,9 +85,9 @@ describe "gratter" do
         expect(data.values[0]).not_to eq([])
       end
 
-      it "checking => data" do
-        expect(data).to eq(1)
-      end
+      # it "checking => data" do
+      #   expect(data).to eq(1)
+      # end
 
     end
 
@@ -97,26 +95,22 @@ describe "gratter" do
 
       context "single nodes" do
 
-        let(:xpather_single_output) { { :tagA => 'valA', :tagB => 'valB', :tagC => 'valC' } }
-        let(:single_matcher) { Matcher.new(xpather_single_output) }
+        let(:xpather_output) { { :tagA => ['valA'], :tagB => ['valB'], :tagC => ['valC'] } }
+        let(:matcher) { Matcher.new(xpather_output) }
 
         it "returns an array with 1 hash in it if given single nodes input" do
-          expect(single_matcher.match.size).to eq(1)
+          expect(matcher.match.size).to eq(1)
         end
 
         it "returns an array having 1 hash whose size is the same as number of tags, if given single nodes input" do
-          expect(single_matcher.match[0].size).to eq(xpather_single_output.size)
+          expect(matcher.match[0].size).to eq(xpather_output.size)
         end
-
-        # it "checking => single_nodes_only?" do
-        #   expect(single_matcher.single_nodes_only?).to eq(true)
-        # end
 
       end
 
       context "arrays differ in size" do
 
-        let(:xpather_faulty_output) { { :tagA => ['valA1', 'valA2', 'valA3'], :tagB => ['valB1', 'valB2'], :tagC => 'valC' } }
+        let(:xpather_faulty_output) { { :tagA => ['valA1', 'valA2', 'valA3'], :tagB => ['valB1', 'valB2'], :tagC => ['valC'] } }
         let(:faulty_matcher) { Matcher.new(xpather_faulty_output) }
 
         it "returns an exception if arrays differ in size" do
@@ -127,7 +121,7 @@ describe "gratter" do
 
       context "mixed" do
 
-        let(:xpather_output) { { :tagA => ['valA1', 'valA2', 'valA3'], :tagB => ['valB1', 'valB2', 'valB3'], :tagC => 'valC' } }
+        let(:xpather_output) { { :tagA => ['valA1', 'valA2', 'valA3'], :tagB => ['valB1', 'valB2', 'valB3'], :tagC => ['valC'] } }
         let(:expected_max_num_of_nodes) { 3 }
         let(:matcher) { Matcher.new(xpather_output) }
 
