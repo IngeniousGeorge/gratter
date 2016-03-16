@@ -67,24 +67,24 @@ class Matcher
   def match
     sizes = get_arrays_sizes
     check_for_uniform_arrays(sizes)
-    make_arrays_uniform(sizes) if sizes.values.max != sizes.values.min
-    match_nodes(sizes.values.max)
+    make_arrays_uniform(sizes) if sizes.max != sizes.min
+    match_nodes(sizes.max)
   end
 
     def get_arrays_sizes
-      sizes = {}
-      data.each { |tag,value| sizes[tag] = value.size }
+      sizes = []
+      data.each { |tag,value| sizes << value.size }
       return sizes #puts sizes #=> {:album=>1, :artist=>1, :rating=>1} / {:team=>21, :points=>21, :league=>1}
     end
 
     def check_for_uniform_arrays sizes
-      uniques = sizes.values.uniq # p uniques => [1] / [21, 1]
+      uniques = sizes.uniq # p uniques => [1] / [21, 1]
       uniques.delete(1) if uniques.include?(1) && uniques.size > 1
-      raise "problem" if uniques.size > 1
+      raise ArgumentError if uniques.size > 1 # "Invalid data: Node lists are not of the same size and cannot be matched"
     end
 
     def make_arrays_uniform sizes
-      max = sizes.values.max
+      max = sizes.max
       data.each do |tag,value|
         if value.size == 1 then
           array = []
