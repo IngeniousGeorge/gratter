@@ -90,6 +90,24 @@ describe "gratter" do
 
     end
 
+    describe "Adder" do
+
+      let(:xpather_output) { { :tagA => ["valA1", "valA2", "valA3"], :tagB => ["valB1", "valB2", "valB3"], :tagC => ["valC"] } }
+      let(:addition) { { :tagD => "valD" } }
+      let(:adder) { Adder.new(xpather_output) }
+
+      it "has a hash containing tag => array pairs to work with" do
+        expect(adder.data.class).to eq(Hash)
+        expect(adder.data.keys[0].class).to eq(Symbol)
+        expect(adder.data.values[0].class).to eq(Array)
+      end
+
+      it "adds specific tag => array pairs given as arguments to the data" do
+        expect(addaer.add.size).to eq(xpather_output.size + addition.size)
+      end
+
+    end
+
     describe "Matcher" do
 
       context "single nodes" do
@@ -144,13 +162,6 @@ describe "gratter" do
 
     end
 
-    describe "Adder" do
-
-      it "adds specific data to the scraping result array" do
-        pending 'input = { :tagA => "valA", :tagB => ["val1B", "val2B"] } -- takes strings and put them in all, takes arrays and distributes them'
-      end
-
-    end
 
   end
 
