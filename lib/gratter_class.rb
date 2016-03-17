@@ -3,19 +3,21 @@ require 'net/http'
 
 class Gratter
 
-  attr_reader :url
-  attr_reader :xpaths
-  def initialize(args)
-    @url    = args[:url]
-    @xpaths  = args[:xpaths] #|| {}
+  attr_reader :url, :xpaths, :to_be_added
+  def initialize(args = {})
+    @url         = args.fetch(:url)
+    @xpaths      = args.fetch(:xpaths, {})
+    @to_be_added = args.fetch(:to_be_added, {})
   end
 
   def use
-    parser = Parser.new @url
+    parser = Parser.new url
     doc = parser.parse
-    xpather = Xpather.new(doc, @xpaths)
+    xpather = Xpather.new(doc, xpaths)
     xpather_result = xpather.get_data
-    matcher = Matcher.new(xpather_result)
+    adder = Adder.new(xpather_result, to_be_added)
+    adder_result = adder.add_tags
+    matcher = Matcher.new(adder_result)
     matcher_result = matcher.match
     return matcher_result
   end
@@ -42,7 +44,7 @@ end
 
 class Xpather
 
-  ## input -> Nokogiri::HTML::Document
+  ## input -> Nokogiri::HTML::Document / { :tag => "xpath" }
   ## output -> { :tag => ['node'] }
 
   attr_reader :doc, :xpaths # DEV ONLY
