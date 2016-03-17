@@ -63,6 +63,31 @@ class Xpather
 
 end
 
+class Adder
+
+  ## input -> { :key => ['values'] } (xpather_output) / { :key => "to add" }
+  ## output -> { :key => ['values'] }
+
+  attr_reader :data, :to_be_added
+
+  def initialize data, to_be_added
+    @data = data
+    @to_be_added = to_be_added
+  end
+
+  def add_tags
+    format_to_be_added
+    to_be_added.merge(data)
+  end
+
+    def format_to_be_added
+      to_be_added.each do |tag,value|
+        to_be_added[tag] = [value] unless value.class == Array
+      end
+    end
+
+end
+
 class Matcher
 
   ## input -> { :key => ['values', values], :key => ['values'] }

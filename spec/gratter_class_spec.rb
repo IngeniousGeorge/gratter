@@ -94,7 +94,7 @@ describe "gratter" do
 
       let(:xpather_output) { { :tagA => ["valA1", "valA2", "valA3"], :tagB => ["valB1", "valB2", "valB3"], :tagC => ["valC"] } }
       let(:addition) { { :tagD => "valD" } }
-      let(:adder) { Adder.new(xpather_output) }
+      let(:adder) { Adder.new(xpather_output, addition) }
 
       it "has a hash containing tag => array pairs to work with" do
         expect(adder.data.class).to eq(Hash)
@@ -102,8 +102,18 @@ describe "gratter" do
         expect(adder.data.values[0].class).to eq(Array)
       end
 
+      it "has a hash with tag => string pairs to add to given data" do
+        expect(adder.to_be_added.class).to eq(Hash)
+        expect(adder.to_be_added.keys[0].class).to eq(Symbol)
+        expect(adder.to_be_added.values[0].class).to eq(String)
+      end
+
       it "adds specific tag => array pairs given as arguments to the data" do
-        expect(addaer.add.size).to eq(xpather_output.size + addition.size)
+        expect(adder.add_tags.size).to eq(xpather_output.size + addition.size)
+        expect(adder.add_tags.class).to eq(Hash)
+        expect(adder.add_tags.keys[0].class).to eq(Symbol)
+        expect(adder.add_tags.values[0].class).to eq(Array)
+        #expect(adder.add_tags).to eq("!")
       end
 
     end
