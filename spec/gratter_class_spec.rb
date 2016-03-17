@@ -181,7 +181,7 @@ describe "gratter" do
     describe "Transformer" do
 
       let(:matcher_output) { [ { :tagA => 'node1A', :tagB => 'node1B' }, { :tagA => 'node2A', :tagB => 'node2B' } ] }
-      let(:trans_pattern) { { :tagA => Proc.new { |node| node + ' more stuff' } } }
+      let(:trans_pattern) { { :tagA => Proc.new { |node| node + 'more stuff' } } }
       let(:transformer) { Transformer.new(matcher_output, trans_pattern) }
 
       it "has an array of hashes containing sym => string pairs to work with" do

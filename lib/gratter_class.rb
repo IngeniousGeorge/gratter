@@ -3,11 +3,12 @@ require 'net/http'
 
 class Gratter
 
-  attr_reader :url, :xpaths, :to_be_added
+  attr_reader :url, :xpaths, :to_be_added, :trans_pattern
   def initialize(args = {})
-    @url         = args.fetch(:url)
-    @xpaths      = args.fetch(:xpaths, {})
-    @to_be_added = args.fetch(:to_be_added, {})
+    @url           = args.fetch(:url)
+    @xpaths        = args.fetch(:xpaths, {})
+    @to_be_added   = args.fetch(:to_be_added, {})
+    @trans_pattern = args.fetch(:trans_pattern, {})
   end
 
   def use
@@ -19,7 +20,8 @@ class Gratter
     adder_result = adder.add_tags
     matcher = Matcher.new(adder_result)
     matcher_result = matcher.match
-    return matcher_result
+    transformer = Transformer.new(matcher_result, trans_pattern)
+    transformer_result = transformer.transform
   end
 
 end
