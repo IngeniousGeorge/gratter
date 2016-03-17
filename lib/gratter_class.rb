@@ -24,6 +24,9 @@ end
 
 class Parser
 
+  ## input -> url
+  ## output -> Nokogiri::HTML::Document
+
   def initialize url
     @url = url
   end
@@ -38,6 +41,9 @@ class Parser
 end
 
 class Xpather
+
+  ## input -> Nokogiri::HTML::Document
+  ## output -> { :key => ['values'] }
 
   attr_reader :doc, :xpaths
   def initialize(doc, xpaths)
@@ -58,6 +64,9 @@ class Xpather
 end
 
 class Matcher
+
+  ## input -> { :key => ['values', values], :key => ['values'] }
+  ## output -> [ { :key => ['value'], :key => ['value'] }, { :key => ['value'], :key => ['value'] } ]
 
   attr_accessor :data
   def initialize data
