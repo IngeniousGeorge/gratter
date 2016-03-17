@@ -43,10 +43,11 @@ end
 class Xpather
 
   ## input -> Nokogiri::HTML::Document
-  ## output -> { :key => ['values'] }
+  ## output -> { :tag => ['node'] }
 
-  attr_reader :doc, :xpaths
-  def initialize(doc, xpaths)
+  attr_reader :doc, :xpaths # DEV ONLY
+
+  def initialize doc, xpaths
     @doc   = doc
     @xpaths = xpaths
   end
@@ -65,10 +66,10 @@ end
 
 class Adder
 
-  ## input -> { :key => ['values'] } (xpather_output) / { :key => "to add" }
-  ## output -> { :key => ['values'] }
+  ## input -> { :tag => ['nodes'] } (xpather_output) / { :tag => 'node' } || { :tag => ['node1', 'node2'] } || { :tag => ['node'] }
+  ## output -> { :tag => ['nodes'] }
 
-  attr_reader :data, :to_be_added
+  attr_reader :data, :to_be_added # DEV ONLY
 
   def initialize data, to_be_added
     @data = data
@@ -90,10 +91,11 @@ end
 
 class Matcher
 
-  ## input -> { :key => ['values', values], :key => ['values'] }
-  ## output -> [ { :key => ['value'], :key => ['value'] }, { :key => ['value'], :key => ['value'] } ]
+  ## input -> { :tag => ['node', 'node'], :tag => ['node'] }
+  ## output -> [ { :tag => 'node', :tag => 'node' }, { :tag => 'node', :tag => 'node' } ]
 
-  attr_accessor :data
+  attr_accessor :data # DEV ONLY
+
   def initialize data
     @data = data
   end
@@ -138,5 +140,30 @@ class Matcher
       end
       return result
     end
+
+end
+
+class Transformer
+
+  ## input -> { :tag => Proc.new { |node| node + 1 } } / [ { :tag => 'node', :tag => 'node' }, { :tag => 'node', :tag => 'node' } ]
+  ## output -> [ { :tag => 'node', :tag => 'node' }, { :tag => 'node', :tag => 'node' } ]
+
+  attr_reader :data, :trans_pattern # DEV ONLY
+
+  def initialize data, trans_pattern
+    @data = data
+    @trans_pattern = trans_pattern
+  end
+
+  def transform
+    trans_pattern.each do |tag_trans,code|
+      data.each_with_index do |hash,index|
+        hash.each do |tag_data,value|
+          data[index][tag_data] = code.call(value) if tag_trans == tag_data
+        end
+      end
+    end
+    data
+  end
 
 end

@@ -157,11 +157,17 @@ describe "gratter" do
         end
 
         it "returns an array of size expected_max_num_of_nodes" do
+          expect(matcher.match.class).to eq(Array)
           expect(matcher.match.size).to eq(expected_max_num_of_nodes)
         end
 
         it "returns an array of hashes whose size is the same as xpather_output/number of tags" do
+          expect(matcher.match[0].class).to eq(Hash)
           expect(matcher.match[0].size).to eq(xpather_output.size)
+        end
+
+        it "return nodes in the form of strings" do
+          expect(matcher.match[0].values[0].class).to eq(String)
         end
 
         # it "checking => match" do
@@ -172,6 +178,31 @@ describe "gratter" do
 
     end
 
+    describe "Transformer" do
+
+      let(:matcher_output) { [ { :tagA => 'node1A', :tagB => 'node1B' }, { :tagA => 'node2A', :tagB => 'node2B' } ] }
+      let(:trans_pattern) { { :tagA => Proc.new { |node| node + ' more stuff' } } }
+      let(:transformer) { Transformer.new(matcher_output, trans_pattern) }
+
+      it "has an array of hashes containing sym => string pairs to work with" do
+        expect(transformer.data.class).to eq(Array)
+        expect(transformer.data[0].class).to eq(Hash)
+        expect(transformer.data[0].values[0].class).to eq(String)
+      end
+
+      it "transforms the data whose tags are present in the trans_pattern hash" do
+        expect(transformer.transform[0].values[0]).to eq("node1A more stuff")
+      end
+
+      it "does not change the data whose tags are NOT present in the trans_pattern hash" do
+        expect(transformer.transform[0].values[1]).to eq("node1B")
+      end
+
+      # it "checking transform" do
+      #   expect(transformer.transform).to eq("!")
+      # end
+
+    end
 
   end
 
