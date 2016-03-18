@@ -17,6 +17,9 @@ gem 'coffee-rails', '~> 4.1.0'
 # Update for rubygem
 gem 'rubygems-update', '~> 2.6', '>= 2.6.1'
 
+# Mysql
+gem 'mysql2', '~> 0.3.18'
+
 # Rspec
 gem 'rspec', '~> 3.0'
 

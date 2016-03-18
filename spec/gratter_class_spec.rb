@@ -181,7 +181,7 @@ describe "gratter" do
     describe "Transformer" do
 
       let(:matcher_output) { [ { :tagA => 'node1A', :tagB => 'node1B' }, { :tagA => 'node2A', :tagB => 'node2B' } ] }
-      let(:trans_pattern) { { :tagA => Proc.new { |node| node + 'more stuff' } } }
+      let(:trans_pattern) { { :tagA => Proc.new { |node| node + ' more stuff' } } }
       let(:transformer) { Transformer.new(matcher_output, trans_pattern) }
 
       it "has an array of hashes containing sym => string pairs to work with" do
@@ -201,6 +201,24 @@ describe "gratter" do
       # it "checking transform" do
       #   expect(transformer.transform).to eq("!")
       # end
+
+    end
+
+    describe "Inserter" do
+
+      let(:transformer_output) { [ { :tagA => 'node1A', :tagB => 'node1B' }, { :tagA => 'node2A', :tagB => 'node2B' } ] }
+      let(:connection) {  }
+      let(:inserter) { Inserter.new(:transformer_output, :connection, "table") }
+
+      it "has an array of hashes containing sym => string pairs to work with" do
+        expect(inserter.data.class).to eq(Array)
+        expect(inserter.data[0].class).to eq(Hash)
+        expect(inserter.data[0].values[0].class).to eq(String)
+      end
+
+      it "adds rows in the db>table" do
+        pending
+      end
 
     end
 

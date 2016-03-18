@@ -171,3 +171,22 @@ class Transformer
   end
 
 end
+
+class Inserter
+
+  ## input -> [ { :tag => 'node', :tag => 'node' }, { :tag => 'node', :tag => 'node' } ] / connection / table_name
+  ## output -> rows in DB
+
+  attr_reader :data, :connection, :table # DEV ONLY
+
+  def initialize(args = {})
+    @data       = args.fetch(:data)
+    @connection = args.fetch(:connection)
+    @table      = args.fetch(:table)
+  end
+
+  def Insert
+
+  end
+
+end
