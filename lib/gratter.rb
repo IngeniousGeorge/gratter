@@ -18,8 +18,7 @@ trans_pattern = { :league => Proc.new { |node| node.gsub /.*&#8211; /, '' }, :da
 
 
 result = Gratter.new( { url: url, xpaths: xpaths, to_be_added: to_be_added, trans_pattern: trans_pattern } )
-
-#puts result.use
+puts result.use
 
 #con = Mysql.new('localhost', 'root', 'tely')
 

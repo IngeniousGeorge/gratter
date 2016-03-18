@@ -46,7 +46,7 @@ describe "gratter" do
 
     describe "Parser" do
 
-      let(:parser) { Parser.new("http://www.duckduckgo.com") }
+      let(:parser) { Parser.new(:url => "http://www.duckduckgo.com") }
 
       it "returns a Nokogiri document on parse" do
         expect(parser.parse.class).to eql(Nokogiri::HTML::Document)
@@ -61,7 +61,7 @@ describe "gratter" do
       # let(:xpaths) { { :team => "(//td[@class='ltn'])[position()>1]/text()", :points => "(//td[@class='ltp'])[position()>1]/text()" } }
 
       ## Livescore
-      let(:xpather) { Xpather.new(Parser.new("http://www.livescore.com/soccer/england/premier-league/").parse, xpaths) }
+      let(:xpather) { Xpather.new( { :doc => Parser.new(:url => "http://www.livescore.com/soccer/england/premier-league/").parse, :xpaths => xpaths } ) }
       let(:xpaths) { { :team => "(//div[@class='team'])[position()>1]/text()", :points => "(//div[@class='pts tot'])[position()>1]/text()", :league => "//div[@class='left']//a//text()" } }
       ## Pitchfork
       # let(:xpather) { Xpather.new(Parser.new("http://pitchfork.com/reviews/albums/21631-no-one-deserves-happiness/").parse, xpaths) }
@@ -94,7 +94,7 @@ describe "gratter" do
 
       let(:xpather_output) { { :tagA => ["valA1", "valA2", "valA3"], :tagB => ["valB1", "valB2", "valB3"], :tagC => ["valC"] } }
       let(:addition) { { :tagD => "valD" } }
-      let(:adder) { Adder.new(xpather_output, addition) }
+      let(:adder) { Adder.new( { :data => xpather_output, :to_be_added => addition } ) }
 
       it "has a hash containing tag => array pairs to work with" do
         expect(adder.data.class).to eq(Hash)
@@ -123,7 +123,7 @@ describe "gratter" do
       context "single nodes" do
 
         let(:xpather_output) { { :tagA => ['valA'], :tagB => ['valB'], :tagC => ['valC'] } }
-        let(:matcher) { Matcher.new(xpather_output) }
+        let(:matcher) { Matcher.new( { :data=> xpather_output } ) }
 
         it "returns an array with 1 hash in it if given single nodes input" do
           expect(matcher.match.size).to eq(1)
@@ -138,7 +138,7 @@ describe "gratter" do
       context "arrays differ in size" do
 
         let(:xpather_faulty_output) { { :tagA => ['valA1', 'valA2', 'valA3'], :tagB => ['valB1', 'valB2'], :tagC => ['valC'] } }
-        let(:faulty_matcher) { Matcher.new(xpather_faulty_output) }
+        let(:faulty_matcher) { Matcher.new( { :data => xpather_faulty_output } ) }
 
         # it "returns an exception if arrays differ in size" do
         #   expect(faulty_matcher.match).to raise_error(ArgumentError)
@@ -150,7 +150,7 @@ describe "gratter" do
 
         let(:xpather_output) { { :tagA => ["valA1", "valA2", "valA3"], :tagB => ["valB1", "valB2", "valB3"], :tagC => ["valC"] } }
         let(:expected_max_num_of_nodes) { 3 }
-        let(:matcher) { Matcher.new(xpather_output) }
+        let(:matcher) { Matcher.new( { :data => xpather_output } ) }
 
         it "has a hash to work with" do
           expect(matcher.data.class).to be(Hash)
@@ -182,7 +182,7 @@ describe "gratter" do
 
       let(:matcher_output) { [ { :tagA => 'node1A', :tagB => 'node1B' }, { :tagA => 'node2A', :tagB => 'node2B' } ] }
       let(:trans_pattern) { { :tagA => Proc.new { |node| node + ' more stuff' } } }
-      let(:transformer) { Transformer.new(matcher_output, trans_pattern) }
+      let(:transformer) { Transformer.new( { :data => matcher_output, :trans_pattern => trans_pattern } ) }
 
       it "has an array of hashes containing sym => string pairs to work with" do
         expect(transformer.data.class).to eq(Array)

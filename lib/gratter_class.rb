@@ -1,6 +1,5 @@
 require 'nokogiri'
 require 'net/http'
-require 'mysql'
 
 class Gratter
 
@@ -13,15 +12,15 @@ class Gratter
   end
 
   def use
-    parser = Parser.new url
+    parser = Parser.new( { :url => url } )
     doc = parser.parse
-    xpather = Xpather.new(doc, xpaths)
+    xpather = Xpather.new(:doc => doc, :xpaths => xpaths)
     xpather_result = xpather.get_data
-    adder = Adder.new(xpather_result, to_be_added)
+    adder = Adder.new(:data => xpather_result, :to_be_added => to_be_added)
     adder_result = adder.add_tags
-    matcher = Matcher.new(adder_result)
+    matcher = Matcher.new(:data => adder_result)
     matcher_result = matcher.match
-    transformer = Transformer.new(matcher_result, trans_pattern)
+    transformer = Transformer.new(:data => matcher_result, :trans_pattern => trans_pattern)
     transformer_result = transformer.transform
   end
 
@@ -32,8 +31,8 @@ class Parser
   ## input -> url
   ## output -> Nokogiri::HTML::Document
 
-  def initialize url
-    @url = url
+  def initialize(args = {})
+    @url = args.fetch(:url)
   end
 
   def parse
@@ -52,9 +51,9 @@ class Xpather
 
   attr_reader :doc, :xpaths # DEV ONLY
 
-  def initialize doc, xpaths
-    @doc   = doc
-    @xpaths = xpaths
+  def initialize(args = {})
+    @doc    = args.fetch(:doc)
+    @xpaths = args.fetch(:xpaths)
   end
 
   def get_data
@@ -76,9 +75,9 @@ class Adder
 
   attr_reader :data, :to_be_added # DEV ONLY
 
-  def initialize data, to_be_added
-    @data = data
-    @to_be_added = to_be_added
+  def initialize(args = {})
+    @data        = args.fetch(:data)
+    @to_be_added = args.fetch(:to_be_added)
   end
 
   def add_tags
@@ -101,8 +100,8 @@ class Matcher
 
   attr_accessor :data # DEV ONLY
 
-  def initialize data
-    @data = data
+  def initialize(args = {})
+    @data = args.fetch(:data)
   end
 
   def match
@@ -155,9 +154,9 @@ class Transformer
 
   attr_reader :data, :trans_pattern # DEV ONLY
 
-  def initialize data, trans_pattern
-    @data = data
-    @trans_pattern = trans_pattern
+  def initialize(args = {})
+    @data          = args.fetch(:data)
+    @trans_pattern = args.fetch(:trans_pattern)
   end
 
   def transform
