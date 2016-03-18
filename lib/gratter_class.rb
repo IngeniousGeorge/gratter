@@ -1,5 +1,6 @@
 require 'nokogiri'
 require 'net/http'
+require 'mysql'
 
 class Gratter
 

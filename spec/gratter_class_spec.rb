@@ -207,8 +207,8 @@ describe "gratter" do
     describe "Inserter" do
 
       let(:transformer_output) { [ { :tagA => 'node1A', :tagB => 'node1B' }, { :tagA => 'node2A', :tagB => 'node2B' } ] }
-      let(:connection) {  }
-      let(:inserter) { Inserter.new(:transformer_output, :connection, "table") }
+      let(:con) {  }
+      let(:inserter) { Inserter.new( { :data => transformer_output, :connection => con, :table => "table" }) }
 
       it "has an array of hashes containing sym => string pairs to work with" do
         expect(inserter.data.class).to eq(Array)

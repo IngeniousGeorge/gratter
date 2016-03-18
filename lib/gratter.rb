@@ -1,6 +1,7 @@
 require_relative 'gratter_class'
 require 'date'
 
+
 # Livefootball
 url = "http://www.livefootball.com/football/england/premier-league/league-table/"
 xpaths = { :team => "(//td[@class='ltn'])[position()>1]/text()", :points => "(//td[@class='ltp'])[position()>1]/text()", :league => "//div[@class='header']/h2/text()" }
@@ -18,8 +19,11 @@ trans_pattern = { :league => Proc.new { |node| node.gsub /.*&#8211; /, '' }, :da
 
 result = Gratter.new( { url: url, xpaths: xpaths, to_be_added: to_be_added, trans_pattern: trans_pattern } )
 
-puts result.use
+#puts result.use
 
+#con = Mysql.new('localhost', 'root', 'tely')
+
+#puts con.get_server_info
 # parser = Parser.new(url)
 #
 # doc = parser.parse
